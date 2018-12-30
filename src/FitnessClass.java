@@ -20,6 +20,7 @@ abstract class FitnessClass {
     void add_customer(Customer customer) {
         if (customerList.size() < 20)
             customerList.add(customer);
+            System.out.println("Added " + customer);
     }
 
     //Remove customer from the class
@@ -29,4 +30,10 @@ abstract class FitnessClass {
 
     //Mark customer as attended
     //abstract void class_attended(Customer customer);
+    
+    public String toString() {
+        return getClassName();
+    }
+
+    protected abstract String getClassName();
 }
