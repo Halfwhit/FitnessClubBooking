@@ -11,32 +11,21 @@ public class BookingController {
     private ArrayList<Customer> customers;
 
     BookingController() {
-        yearlySchedule = new ArrayList<LinkedHashMap<Session, FitnessClass>>();
-        defaultSchedule = new LinkedHashMap<Session, FitnessClass>();
-        customers = new ArrayList<Customer>();
+        yearlySchedule = new ArrayList<>();
+        customers = new ArrayList<>();
 
-        book_default_classes();
-
-        populate_timetable();
+        populate_yearlySchedule();
     }
 
-    private void book_default_classes() {
-        scheduleClass(defaultSchedule, Session.SAT_MORN,     new ZumbaClass());
-        scheduleClass(defaultSchedule, Session.SAT_AFTER,    new YogaClass());
-        scheduleClass(defaultSchedule, Session.SAT_EVE_1,    new SpinClass());
-        scheduleClass(defaultSchedule, Session.SAT_EVE_2,    new BoxerciseClass());
-        scheduleClass(defaultSchedule, Session.SUN_MORN,     new YogaClass());
-        scheduleClass(defaultSchedule, Session.SUN_AFTER,    new ZumbaClass());
-        scheduleClass(defaultSchedule, Session.SUN_EVE_1,    new BodysculptClass());
-        scheduleClass(defaultSchedule, Session.SUN_EVE_2,    new SpinClass());
-    }
-
-    public ArrayList get_yearlySchedule() {
-        return yearlySchedule;
-    }
-
-    LinkedHashMap get_defaultSchedule() {
-        return defaultSchedule;
+    private void book_default_classes(LinkedHashMap<Session, FitnessClass> schedule) {
+        scheduleClass(schedule, Session.SAT_MORN,     new ZumbaClass());
+        scheduleClass(schedule, Session.SAT_AFTER,    new YogaClass());
+        scheduleClass(schedule, Session.SAT_EVE_1,    new SpinClass());
+        scheduleClass(schedule, Session.SAT_EVE_2,    new BoxerciseClass());
+        scheduleClass(schedule, Session.SUN_MORN,     new YogaClass());
+        scheduleClass(schedule, Session.SUN_AFTER,    new ZumbaClass());
+        scheduleClass(schedule, Session.SUN_EVE_1,    new BodysculptClass());
+        scheduleClass(schedule, Session.SUN_EVE_2,    new SpinClass());
     }
 
     private void scheduleClass(LinkedHashMap<Session, FitnessClass> schedule, Session session, FitnessClass fitnessClass) {
@@ -44,10 +33,12 @@ public class BookingController {
     }
 
     // Adds the default weekly schedule to every week of the year
-    private void populate_timetable() {
+    private void populate_yearlySchedule() {
         for (int i = 0; i < 52; i++) {
             LinkedHashMap<Session, FitnessClass> schedule;
-            schedule = (LinkedHashMap<Session, FitnessClass>) defaultSchedule.clone();
+            schedule = new LinkedHashMap<Session, FitnessClass>();
+
+            book_default_classes(schedule);
             yearlySchedule.add(schedule);
         }
     }
@@ -86,10 +77,6 @@ public class BookingController {
 
     LinkedHashMap<Session, FitnessClass> get_week_timetable(int weekNumber) {
         return yearlySchedule.get(weekNumber);
-    }
-
-    FitnessClass get_class(Session session) {
-        return defaultSchedule.get(session);
     }
 
     void new_customer(String name) {

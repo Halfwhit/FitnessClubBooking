@@ -16,43 +16,6 @@ public class UI {
         return in;
     }
 
-    public static String get_input_string(Input input) {
-        Scanner sc;
-        String in;
-
-        switch (input){
-            case NAME:
-                System.out.println("\nPlease enter your name:");
-        }
-
-        sc = new Scanner(System.in);
-        in = sc.next();
-
-        return in;
-    }
-
-    public static void menu_main() {
-        System.out.println("\n1. Create new user\n" +
-                             "2. Book a class\n" +
-                             "3. See class details");
-    }
-
-    public static void menu_booking() {
-        System.out.println("\n1. Book test class\n" +
-                             "2. Change a booking\n ");
-    }
-    //TODO
-    public static void menu_details() {
-        System.out.println("\n1. Print timetable\n" +
-                             "2. //TODO");
-    }
-
-    public static void menu_timetable() {
-        System.out.println("\n1. Print default timetable\n" +
-                             "2. Print entire timetable\n" +
-                             "3. Print selected week");
-    }
-
     public static int get_menu_input() {
         Scanner sc;
         int in;
@@ -101,7 +64,17 @@ public class UI {
         return null;
     }
 
-    public static void login_text() {
+    public static int menu_main() {
+        System.out.println("\n1. Book a class\n" +
+                "2. Change a class\n" +
+                "3. Attend a class\n" +
+                "4. Monthly fitness class reports\n" +
+                "5. Monthly champion fitness class report");
+        return get_menu_input();
+    }
 
+    public static String get_name() {
+        System.out.println("\nPlease enter your name:");
+        return get_input_string();
     }
 }

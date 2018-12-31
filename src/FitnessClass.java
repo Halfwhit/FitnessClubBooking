@@ -11,16 +11,19 @@ abstract class FitnessClass {
 
     ArrayList<Customer> customerList;
 
+    FitnessClass() {
+        customerList = new ArrayList<>();
+    }
+
     //List of booked customer
     ArrayList<Customer> get_list() {
         return customerList;
     }
 
     //Add customer to the class
-    void add_customer(Customer customer) {
+    public void add_customer(Customer customer) {
         if (customerList.size() < 20)
-            customerList.add(customer);
-            System.out.println("Added " + customer);
+            this.customerList.add(customer);
     }
 
     //Remove customer from the class
@@ -32,7 +35,10 @@ abstract class FitnessClass {
     //abstract void class_attended(Customer customer);
     
     public String toString() {
-        return getClassName();
+        String out = getClassName();
+        if (customerList.size() == 20)
+            out = out + " - FULL";
+        return out;
     }
 
     protected abstract String getClassName();
