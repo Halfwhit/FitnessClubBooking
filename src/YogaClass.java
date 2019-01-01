@@ -3,8 +3,9 @@ class YogaClass extends FitnessClass {
     private String className;
     private int price;
 
-    YogaClass() {
-        this.className = "YOGA";
+    YogaClass(int weekNumber, BookingController.Session session) {
+        super(weekNumber, session);
+        this.className = "Yoga";
         this.price = YOGA_PRICE;
     }
 
@@ -14,10 +15,5 @@ class YogaClass extends FitnessClass {
 
     public int getPrice() {
         return price;
-    }
-
-    @Override
-    public String toString() {
-        return className;
     }
 }

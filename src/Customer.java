@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,13 +22,21 @@ class Customer {
         classes.put(fitnessClass, false);
     }
 
-    public void print_classes(Boolean attended) {
+    public void attend_class(FitnessClass fitnessClass) {
+        classes.put(fitnessClass, true);
+    }
+
+    public void remove_from_class(FitnessClass fitnessClass) {
+        classes.remove(fitnessClass);
+    }
+
+    public ArrayList<FitnessClass> get_classList(Boolean attended) {
         ArrayList<FitnessClass> classList = new ArrayList<>();
         for (Map.Entry<FitnessClass, Boolean> entry : classes.entrySet()) {
             if (entry.getValue() == attended)
                 classList.add(entry.getKey());
         }
-        System.out.println(classList);
+        return classList;
     }
 
     public String toString() {

@@ -3,8 +3,9 @@ class SpinClass extends FitnessClass {
     private String className;
     private int price;
 
-    SpinClass() {
-        this.className = "SPIN";
+    SpinClass(int weekNumber, BookingController.Session session) {
+        super(weekNumber, session);
+        this.className = "Spin";
         this.price = SPIN_PRICE;
     }
 
@@ -14,10 +15,5 @@ class SpinClass extends FitnessClass {
 
     public int getPrice() {
         return price;
-    }
-
-    @Override
-    public String toString() {
-        return className;
     }
 }

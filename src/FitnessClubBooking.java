@@ -12,10 +12,12 @@ public class FitnessClubBooking {
         System.out.println("Fitness Club Booking is now running...");
 
         bc = new BookingController();
-        running = true;
 
+        running = true;
+        get_customer();
         while (running) {
-            MainMenu();
+            while (customer != null)
+                MainMenu();
         }
     }
 
@@ -24,15 +26,16 @@ public class FitnessClubBooking {
             case 1:
                 //Book a class
                 book_class();
-                customer.print_classes(false);
+                clear_data(); //TODO: Move to book_class() when done debugging
                 break;
             case 2:
                 //Change a class
-
+                change_class();
+                clear_data(); //TODO: Move to change_class() when done debugging
                 break;
             case 3:
                 //Attend a class
-
+                attend_class();
                 break;
             case 4:
                 //Monthly fitness class report
@@ -40,12 +43,19 @@ public class FitnessClubBooking {
             case 5:
                 //Monthly champion fitness class report
             case 0:
-                running = false;
+                customer = null;
+                get_customer();
         }
     }
 
     void get_customer() {
-        String customerName = UI.get_name();
+
+        String customerName = UI.get_customer();
+
+        if (check_for_exit(customerName)) {
+            running = false;
+            return;
+        }
 
         if (!bc.check_customer(customerName)) {
             System.out.println("Adding new user: " + customerName);
@@ -55,79 +65,55 @@ public class FitnessClubBooking {
         System.out.println("\nWelcome, " + customer.get_name());
     }
 
-    void BookingMenu() {
-        switch (UI.get_menu_input()) {
-            case 1:
-                LinkedHashMap<BookingController.Session, FitnessClass> timetable;
-                int week;
-                BookingController.Session session;
-
-                week = UI.select_week();
-                bc.print_timetable(week);
-                timetable = bc.get_week_timetable(week);
-                session = UI.select_session();
-
-                //TODO: Sign up customer for a class
-                FitnessClass fitnessClass = timetable.get(session);
-                bc.book_customer_to_class(customer, fitnessClass);
-                break;
-            case 0:
-                running = false;
-        }
-    }
-
-    void DetailsMenu() {
-        switch (UI.get_menu_input()) {
-            case 1:
-                TimetableMenu();
-                break;
-            case 2:
-                System.out.println("//TODO");
-                break;
-            case 0:
-                running = false;
-        }
-    }
-
-    void TimetableMenu() {
-        switch (UI.get_menu_input()) {
-            case 1:
-                System.out.println("TODO");
-                break;
-            case 2:
-                bc.print_timetable();
-                break;
-            case 3:
-                bc.print_timetable(UI.select_week());
-        }
-    }
-
-    private void clear() {
-        customer = null;
-        fitnessClass = null;
-    }
-
-    void get_class() {
+    void set_class() {
         LinkedHashMap<BookingController.Session, FitnessClass> timetable;
         int week;
         BookingController.Session session;
 
+        UI.customer_get_fitness_class();
         week = UI.select_week();
-        bc.print_timetable(week);
+        bc.print_timetable(week); //TODO: Is this needed?
         timetable = bc.get_week_timetable(week);
         session = UI.select_session();
 
         fitnessClass = timetable.get(session);
     }
 
-    void book_class() {
-        if (customer == null)
-            get_customer();
-        if (fitnessClass == null)
-            get_class();
+    private void clear_data() {
+        fitnessClass = null;
+    }
 
+    void book_class() {
+        if (fitnessClass == null)
+            set_class();
         bc.book_customer_to_class(customer, fitnessClass);
-        customer.add_to_class(fitnessClass);
-        clear();
+        UI.print_classes(customer.get_name(), false, bc.get_customer_classList(customer, false));
+        clear_data();
+    }
+
+    void change_class() {
+        if (fitnessClass == null)
+            set_class();
+
+        bc.remove_customer_from_class(customer, fitnessClass);
+        UI.print_classes(customer.get_name(), false, bc.get_customer_classList(customer, false));
+        clear_data();
+    }
+
+    void attend_class() {
+        if (fitnessClass == null)
+            set_class();
+
+        bc.customer_attend_class(customer, fitnessClass);
+        UI.print_classes(customer.get_name(), true, bc.get_customer_classList(customer, true));
+        clear_data();
+    }
+
+    private boolean check_for_exit(String input) {
+
+        if (input.equals("0")) {
+            return true;
+        }
+        return false;
     }
 }

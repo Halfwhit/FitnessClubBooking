@@ -1,10 +1,7 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UI {
-
-    enum Input {
-        NAME
-    }
 
     public static String get_input_string() {
         Scanner sc;
@@ -20,29 +17,30 @@ public class UI {
         Scanner sc;
         int in;
 
-        System.out.println("Select an option, or zero to exit:");
+        System.out.println("Select an option: ");
         sc = new Scanner(System.in);
         in = sc.nextInt();
 
         return in;
     }
 
+    public static void customer_get_fitness_class() {
+        System.out.println("Please choose a class");
+    }
+
     public static int select_week() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("\nPlease select a week: (1-52)");
+        System.out.println("Input a week number: (1-52)");
         int in = sc.nextInt();
         return in;
     }
 
     public static BookingController.Session select_session() {
-        System.out.println("\n1. Saturday Morning\n" +
-                             "2. Saturday Afternoon\n" +
-                             "3. Saturday Evening 1\n" +
-                             "4. Saturday Evening 2\n" +
-                             "5. Sunday Morning\n" +
-                             "6. Sunday Afternoon\n" +
-                             "7. Sunday Evening 1\n" +
-                             "8. Sunday Evening 2");
+        int i = 1;
+        for (BookingController.Session session : BookingController.Session.values()) {
+            System.out.println(i++ + ". " + session);
+        }
+
         switch (get_menu_input()) {
             case 1:
                 return BookingController.Session.SAT_MORN;
@@ -60,21 +58,40 @@ public class UI {
                 return BookingController.Session.SUN_EVE_1;
             case 8:
                 return BookingController.Session.SUN_EVE_2;
+                default:
+                    return null;
         }
-        return null;
+
     }
 
     public static int menu_main() {
         System.out.println("\n1. Book a class\n" +
-                "2. Change a class\n" +
+                "2. Cancel a booking\n" +
                 "3. Attend a class\n" +
                 "4. Monthly fitness class reports\n" +
-                "5. Monthly champion fitness class report");
+                "5. Monthly champion fitness class report\n" +
+                "\n0. Logout");
         return get_menu_input();
     }
 
-    public static String get_name() {
-        System.out.println("\nPlease enter your name:");
+    public static String get_customer() {
+        System.out.println("Enter your name, 0 to go back/exit:");
         return get_input_string();
+    }
+
+    public static void print_classes(String customerName, Boolean attended, ArrayList<FitnessClass> classList) {
+        String formattedClassList = "\n";
+
+        for (FitnessClass fitnessClass : classList) {
+            formattedClassList = "\nWeek: " + fitnessClass.get_weekNumber() +
+                                 "    Time: " + fitnessClass.get_session() +
+                                 "   Class: " + fitnessClass.getClassName() + formattedClassList;
+        }
+
+        if (attended == false) {
+            System.out.println(customerName + " has booked the following classes:" + formattedClassList);
+        } else if (attended == true) {
+            System.out.println( customerName + " has attended the following classes:" + formattedClassList);
+        }
     }
 }
