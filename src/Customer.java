@@ -1,13 +1,9 @@
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class Customer {
 
-    private String customerName;
-    private HashMap<FitnessClass, Boolean> classes;
+    private final String customerName;
+    private final HashMap<FitnessClass, Boolean> classes;
 
     Customer(String name) {
         this.customerName = name;
@@ -30,12 +26,23 @@ class Customer {
         classes.remove(fitnessClass);
     }
 
-    public ArrayList<FitnessClass> get_classList(Boolean attended) {
+    public ArrayList<FitnessClass> get_booked() {
+        return get_classList(false);
+    }
+
+    public ArrayList<FitnessClass> get_attended() {
+        return get_classList(true);
+    }
+
+    private ArrayList<FitnessClass> get_classList(Boolean attended) {
         ArrayList<FitnessClass> classList = new ArrayList<>();
         for (Map.Entry<FitnessClass, Boolean> entry : classes.entrySet()) {
             if (entry.getValue() == attended)
                 classList.add(entry.getKey());
         }
+
+        Collections.sort(classList, Comparator.comparingInt(FitnessClass::get_weekNumber));
+
         return classList;
     }
 

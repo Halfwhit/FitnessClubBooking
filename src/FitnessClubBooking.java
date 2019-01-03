@@ -1,8 +1,12 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class FitnessClubBooking {
+class FitnessClubBooking {
 
-    private BookingController bc;
+    private final BookingController bc;
+    private final ReviewController rc;
     private boolean running;
     private Customer customer;
     private FitnessClass fitnessClass;
@@ -12,6 +16,7 @@ public class FitnessClubBooking {
         System.out.println("Fitness Club Booking is now running...");
 
         bc = new BookingController();
+        rc = new ReviewController();
 
         running = true;
         get_customer();
@@ -21,12 +26,11 @@ public class FitnessClubBooking {
         }
     }
 
-    void MainMenu() {
+    private void MainMenu() {
         switch (UI.menu_main()) {
             case 1:
                 //Book a class
                 book_class();
-                clear_data(); //TODO: Move to book_class() when done debugging
                 break;
             case 2:
                 //Change a class
@@ -38,17 +42,24 @@ public class FitnessClubBooking {
                 attend_class();
                 break;
             case 4:
-                //Monthly fitness class report
+                //Review a class
+                review_class();
                 break;
             case 5:
+                //Monthly fitness class report
+                get_reports();
+                break;
+            case 6:
                 //Monthly champion fitness class report
+                get_champion();
+                break;
             case 0:
                 customer = null;
                 get_customer();
         }
     }
 
-    void get_customer() {
+    private void get_customer() {
 
         String customerName = UI.get_customer();
 
@@ -65,7 +76,7 @@ public class FitnessClubBooking {
         System.out.println("\nWelcome, " + customer.get_name());
     }
 
-    void set_class() {
+    private void set_class() {
         LinkedHashMap<BookingController.Session, FitnessClass> timetable;
         int week;
         BookingController.Session session;
@@ -83,7 +94,7 @@ public class FitnessClubBooking {
         fitnessClass = null;
     }
 
-    void book_class() {
+    private void book_class() {
         if (fitnessClass == null)
             set_class();
         bc.book_customer_to_class(customer, fitnessClass);
@@ -91,7 +102,7 @@ public class FitnessClubBooking {
         clear_data();
     }
 
-    void change_class() {
+    private void change_class() {
         if (fitnessClass == null)
             set_class();
 
@@ -100,20 +111,40 @@ public class FitnessClubBooking {
         clear_data();
     }
 
-    void attend_class() {
+    private void attend_class() {
         if (fitnessClass == null)
             set_class();
 
         bc.customer_attend_class(customer, fitnessClass);
         UI.print_classes(customer.get_name(), true, bc.get_customer_classList(customer, true));
+        if (UI.review_now())
+            review_class();
+        else clear_data();
+    }
+
+    private void review_class() {
+        ArrayList<FitnessClass> classList;
+        if (fitnessClass == null)
+            set_class();
+        classList = bc.get_customer_classList(customer, true);
+        if (classList.contains(fitnessClass))
+            rc.review_class(fitnessClass.classType,  UI.review_class(fitnessClass));
         clear_data();
     }
 
+    private void get_reports() {
+
+        int averageRating;
+        BookingController.ClassType classType = UI.class_type();
+
+        System.out.println(rc.get_rating(classType));
+        System.out.println("The average rating for " + classType + " is "); //TODO get average
+    }
+
+    private void get_champion() {}
+
     private boolean check_for_exit(String input) {
 
-        if (input.equals("0")) {
-            return true;
-        }
-        return false;
+        return input.equals("0");
     }
 }

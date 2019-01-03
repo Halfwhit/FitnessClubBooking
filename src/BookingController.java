@@ -1,55 +1,20 @@
-import java.util.*;
+import com.sun.xml.internal.bind.v2.TODO;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class BookingController {
 
-    public enum Session {
-        SAT_MORN {
-            public String toString() {
-                return "Saturday Morning";
-            }
-        },
-        SAT_AFTER {
-            public String toString() {
-                return "Saturday Afternoon";
-            }
-        },
-        SAT_EVE_1 {
-            public String toString() {
-                return "Saturday Evening 1";
-            }
-        },
-        SAT_EVE_2 {
-            public String toString() {
-                return "Saturday Evening 2";
-            }
-        },
-        SUN_MORN {
-            public String toString() {
-                return "Sunday Morning";
-            }
-        },
-        SUN_AFTER {
-            public String toString() {
-                return "Sunday Afternoon";
-            }
-        },
-        SUN_EVE_1 {
-            public String toString() {
-                return "Sunday Evening 1";
-            }
-        },
-        SUN_EVE_2 {
-            public String toString() {
-                return "Sunday Evening 2";
-            }
-        }
+    public enum  ClassType {
+        BODYSCULPT, BOXERCISE, SPIN, YOGA, ZUMBA;
     }
 
-    private ArrayList<LinkedHashMap<Session, FitnessClass>> yearlySchedule;
-    private LinkedHashMap<Session, FitnessClass> defaultSchedule;
-    private ArrayList<Customer> customers;
+    private final ArrayList<LinkedHashMap<Session, FitnessClass>> yearlySchedule; //Contains each weeks timetable
+    private final ArrayList<Customer> customers; //Contains all registered users TODO: is this needed?
 
-    BookingController() {
+    public BookingController() {
         yearlySchedule = new ArrayList<>();
         customers = new ArrayList<>();
 
@@ -76,23 +41,15 @@ public class BookingController {
         for (int i = 0; i < 52; i++) {
             LinkedHashMap<Session, FitnessClass> schedule;
             int weekNumber = i + 1;
-            schedule = new LinkedHashMap<Session, FitnessClass>();
+            schedule = new LinkedHashMap<>();
 
             book_default_classes(schedule, weekNumber);
             yearlySchedule.add(schedule);
         }
     }
 
-    void print_timetable() {
-        for (int i = 0; i < yearlySchedule.size(); i++) {
-            int weekNumber = i + 1;
-            LinkedHashMap<Session, FitnessClass> week = yearlySchedule.get(i);
-            System.out.println("Week: " + weekNumber + "     " + week);
-        }
-    }
-
     void print_timetable(int weekNumber) {
-        LinkedHashMap<Session, FitnessClass> week = yearlySchedule.get(weekNumber - 1);
+        LinkedHashMap<Session, FitnessClass> week = yearlySchedule.get(weekNumber);
 
         System.out.println("-------------------------------");
         System.out.println("Week: " + weekNumber);
@@ -103,16 +60,7 @@ public class BookingController {
         System.out.println("Sunday " + "Morning     : " + week.get(Session.SUN_MORN));
         System.out.println("Sunday " + "Afternoon   : " + week.get(Session.SUN_AFTER));
         System.out.println("Sunday " + "Evening 1   : " + week.get(Session.SUN_EVE_1));
-        System.out.println("Sunday " + "Evening 2   : " + week.get(Session.SUN_EVE_2) +"\n");
-    }
-
-    public void print_timetable(int startWeek, int endWeek) {
-        int weeks = endWeek - startWeek;
-        int weekNumber = startWeek;
-        System.out.println("Printing weeks " + startWeek + " to " + endWeek);
-        for (int i = 0; i <= weeks; i++, weekNumber++) {
-            print_timetable(weekNumber);
-        }
+        System.out.println("Sunday " + "Evening 2   : " + week.get(Session.SUN_EVE_2) + "\n");
     }
 
     LinkedHashMap<Session, FitnessClass> get_week_timetable(int weekNumber) {
@@ -157,10 +105,60 @@ public class BookingController {
     }
 
     public void customer_attend_class(Customer customer, FitnessClass fitnessClass) {
-        customer.attend_class(fitnessClass);
+        if (get_customer_classList(customer, false).contains(fitnessClass))
+            customer.attend_class(fitnessClass);
+        else
+        //TODO: Error check
+            System.out.println("Invalid class");
     }
 
     public ArrayList<FitnessClass> get_customer_classList(Customer customer, Boolean attended) {
-        return customer.get_classList(attended);
+        if (attended)
+            return customer.get_attended();
+        else
+            return customer.get_booked();
+    }
+
+    public enum Session {
+        SAT_MORN {
+            public String toString() {
+                return "Saturday Morning";
+            }
+        },
+        SAT_AFTER {
+            public String toString() {
+                return "Saturday Afternoon";
+            }
+        },
+        SAT_EVE_1 {
+            public String toString() {
+                return "Saturday Evening 1";
+            }
+        },
+        SAT_EVE_2 {
+            public String toString() {
+                return "Saturday Evening 2";
+            }
+        },
+        SUN_MORN {
+            public String toString() {
+                return "Sunday Morning";
+            }
+        },
+        SUN_AFTER {
+            public String toString() {
+                return "Sunday Afternoon";
+            }
+        },
+        SUN_EVE_1 {
+            public String toString() {
+                return "Sunday Evening 1";
+            }
+        },
+        SUN_EVE_2 {
+            public String toString() {
+                return "Sunday Evening 2";
+            }
+        }
     }
 }

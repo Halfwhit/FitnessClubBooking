@@ -9,15 +9,17 @@ abstract class FitnessClass {
     final static int BODYSCULPT_PRICE = 7;
     final static int BOXERCISE_PRICE = 20;
 
-    protected int weekNumber;
-    protected BookingController.Session session;
-    ArrayList<Customer> customerList;
+    public BookingController.ClassType classType;
+    private final int weekNumber;
+    private final BookingController.Session session;
+    private final ArrayList<Customer> customerList;
 
-    public FitnessClass(int weekNumber, BookingController.Session session) {
+    FitnessClass(int weekNumber, BookingController.Session session) {
         customerList = new ArrayList<>();
 
         this.weekNumber = weekNumber;
         this.session = session;
+        this.classType = null;
     }
 
     //List of booked customer
@@ -38,7 +40,7 @@ abstract class FitnessClass {
 
     //Mark customer as attended
     //abstract void class_attended(Customer customer);-
-    
+
     public String toString() {
         String out = getClassName();
         if (customerList.size() == 20)

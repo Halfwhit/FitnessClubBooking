@@ -1,12 +1,13 @@
 class BoxerciseClass extends FitnessClass {
 
-    private String className;
-    private int price;
+    private final String className;
+    private final int price;
 
     BoxerciseClass(int weekNumber, BookingController.Session session) {
         super(weekNumber, session);
         this.className = "Boxercise";
         this.price = BOXERCISE_PRICE;
+        this.classType = BookingController.ClassType.BOXERCISE;
     }
 
     public String getClassName() {

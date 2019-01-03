@@ -1,12 +1,13 @@
 class ZumbaClass extends FitnessClass {
 
-    private String className;
-    private int price;
+    private final String className;
+    private final int price;
 
     ZumbaClass(int weekNumber, BookingController.Session session) {
         super(weekNumber, session);
         this.className = "Zumba";
         this.price = ZUMBA_PRICE;
+        this.classType = BookingController.ClassType.ZUMBA;
     }
 
     public String getClassName() {
