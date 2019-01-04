@@ -41,7 +41,7 @@ class Customer {
                 classList.add(entry.getKey());
         }
 
-        Collections.sort(classList, Comparator.comparingInt(FitnessClass::get_weekNumber));
+        classList.sort(Comparator.comparingInt(FitnessClass::get_weekNumber));
 
         return classList;
     }

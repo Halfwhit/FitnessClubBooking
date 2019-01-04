@@ -1,28 +1,26 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-public class ReviewController {
-
+class ReviewController {
+    private final EnumMap<BookingController.ClassType, Integer> attendanceNumbers;
     private final EnumMap<BookingController.ClassType, ArrayList<Integer>> reviews; //Contains all reviews for each class
-    private final ArrayList<Integer> BodysculptRating;
-    private final ArrayList<Integer> BoxerciseRating;
-    private final ArrayList<Integer> SpinRating;
-    private final ArrayList<Integer> YogaRating;
-    private final ArrayList<Integer> ZumbaRating;
 
     ReviewController() {
         reviews = new EnumMap<>(BookingController.ClassType.class);
-        BodysculptRating = new ArrayList<>();
-        BoxerciseRating = new ArrayList<>();
-        SpinRating = new ArrayList<>();
-        YogaRating = new ArrayList<>();
-        ZumbaRating = new ArrayList<>();
-        reviews.put(BookingController.ClassType.BODYSCULPT, BodysculptRating);
-        reviews.put(BookingController.ClassType.BOXERCISE, BoxerciseRating);
-        reviews.put(BookingController.ClassType.SPIN, SpinRating);
-        reviews.put(BookingController.ClassType.YOGA, YogaRating);
-        reviews.put(BookingController.ClassType.ZUMBA, ZumbaRating);
+        reviews.put(BookingController.ClassType.BODYSCULPT, new ArrayList<>());
+        reviews.put(BookingController.ClassType.BOXERCISE, new ArrayList<>());
+        reviews.put(BookingController.ClassType.SPIN, new ArrayList<>());
+        reviews.put(BookingController.ClassType.YOGA, new ArrayList<>());
+        reviews.put(BookingController.ClassType.ZUMBA, new ArrayList<>());
+
+        attendanceNumbers = new EnumMap<>(BookingController.ClassType.class);
+        attendanceNumbers.put(BookingController.ClassType.BODYSCULPT, 0);
+        attendanceNumbers.put(BookingController.ClassType.BOXERCISE, 0);
+        attendanceNumbers.put(BookingController.ClassType.SPIN, 0);
+        attendanceNumbers.put(BookingController.ClassType.YOGA, 0);
+        attendanceNumbers.put(BookingController.ClassType.ZUMBA, 0);
+
+        System.out.println("Review Controller initialised");
     }
 
     public void review_class(BookingController.ClassType classType, int rating) {
@@ -30,7 +28,41 @@ public class ReviewController {
         ratings.add(rating);
     }
 
-    public ArrayList<Integer> get_rating(BookingController.ClassType classType) {
+    private ArrayList<Integer> get_rating(BookingController.ClassType classType) {
         return reviews.get(classType);
+    }
+
+    public float get_average(BookingController.ClassType classType) {
+        float sum = 0;
+        ArrayList<Integer> reviews = get_rating(classType);
+        for (Integer review : reviews) {
+            sum += review;
+        }
+        return (sum / (reviews.size()));
+    }
+
+    public void attend_class(BookingController.ClassType classType) {
+        attendanceNumbers.put(classType, attendanceNumbers.get(classType) + 1);
+    }
+
+    public int get_class_attendance(BookingController.ClassType classType) {
+        return attendanceNumbers.get(classType);
+    }
+
+    public int get_class_earnings(BookingController.ClassType classType) {
+        int attended = get_class_attendance(classType);
+        switch (classType) {
+            case BODYSCULPT:
+                attended *= FitnessClass.BODYSCULPT_PRICE;
+            case BOXERCISE:
+                attended *= FitnessClass.BOXERCISE_PRICE;
+            case SPIN:
+                attended *= FitnessClass.SPIN_PRICE;
+            case YOGA:
+                attended *= FitnessClass.YOGA_PRICE;
+            case ZUMBA:
+                attended *= FitnessClass.ZUMBA_PRICE;
+        }
+        return attended;
     }
 }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 class UI {
@@ -13,7 +14,7 @@ class UI {
         return in;
     }
 
-    private static int get_menu_input() {
+    public static int get_menu_input() {
         Scanner sc;
         int in;
 
@@ -34,10 +35,10 @@ class UI {
         return (sc.nextInt() - 1);
     }
 
-    public static BookingController.Session select_session() {
+    public static BookingController.Session select_session(LinkedHashMap<BookingController.Session, FitnessClass> timetable) {
         int i = 1;
-        for (BookingController.Session session : BookingController.Session.values()) {
-            System.out.println(i++ + ". " + session);
+        for (BookingController.Session session : timetable.keySet()) {
+            System.out.println(i++ + ". " + session + ": " + timetable.get(session));
         }
 
         switch (get_menu_input()) {
@@ -80,18 +81,18 @@ class UI {
     }
 
     public static void print_classes(String customerName, Boolean attended, ArrayList<FitnessClass> classList) {
-        String formattedClassList = "\n\n";
+        String formattedClassList = "";
 
         for (FitnessClass fitnessClass : classList) {
-            formattedClassList = "\nWeek: " + fitnessClass.get_weekNumber() +
+            formattedClassList += ("\nWeek: " + fitnessClass.get_weekNumber() +
                     "    Time: " + fitnessClass.get_session() +
-                    "   Class: " + fitnessClass.getClassName() + formattedClassList;
+                    "   Class: " + fitnessClass.getClassName());
         }
 
         if (!attended) {
-            System.out.println(customerName + " has booked the following classes:" + formattedClassList);
+            System.out.println(customerName + " has booked the following classes:" + formattedClassList + "\n");
         } else {
-            System.out.println(customerName + " has attended the following classes:" + formattedClassList);
+            System.out.println(customerName + " has attended the following classes:" + formattedClassList + "\n");
         }
     }
 
@@ -109,8 +110,7 @@ class UI {
         System.out.println("Would you like to leave a review of the class?\n" +
                 "1. Yes\n" +
                 "2. No");
-        if (get_menu_input() == 1) return true;
-        else return false;
+        return get_menu_input() == 1;
     }
 
     public static BookingController.ClassType class_type() {
@@ -134,6 +134,23 @@ class UI {
                 return BookingController.ClassType.ZUMBA;
             default:
                 return null;
+        }
+    }
+
+    public static Boolean card_payment() {
+        System.out.println("How will you be paying?\n" +
+                "1. Cash\n" +
+                "2. Card");
+        switch (UI.get_menu_input()) {
+            case 1:
+                System.out.println("Paying by cash");
+                return false;
+            case 2:
+                System.out.println("Paying by card");
+                return true;
+            default:
+                System.out.println("Please select a valid option");
+                return card_payment();
         }
     }
 }

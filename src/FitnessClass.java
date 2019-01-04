@@ -1,21 +1,21 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 
 abstract class FitnessClass {
 
     //Static class prices
-    final static int YOGA_PRICE = 15;
-    final static int ZUMBA_PRICE = 8;
-    final static int SPIN_PRICE = 10;
     final static int BODYSCULPT_PRICE = 7;
     final static int BOXERCISE_PRICE = 20;
+    final static int SPIN_PRICE = 10;
+    final static int YOGA_PRICE = 15;
+    final static int ZUMBA_PRICE = 8;
 
     public BookingController.ClassType classType;
     private final int weekNumber;
     private final BookingController.Session session;
-    private final ArrayList<Customer> customerList;
+    private final HashMap<Customer, Boolean> customerList;
 
     FitnessClass(int weekNumber, BookingController.Session session) {
-        customerList = new ArrayList<>();
+        customerList = new HashMap<>();
 
         this.weekNumber = weekNumber;
         this.session = session;
@@ -23,14 +23,14 @@ abstract class FitnessClass {
     }
 
     //List of booked customer
-    ArrayList<Customer> get_list() {
+    HashMap<Customer, Boolean> get_list() {
         return customerList;
     }
 
     //Add customer to the class
-    public void add_customer(Customer customer) {
+    public void add_customer(Customer customer, Boolean cardPayment) {
         if (customerList.size() < 20)
-            this.customerList.add(customer);
+            this.customerList.put(customer, cardPayment);
     }
 
     //Remove customer from the class
