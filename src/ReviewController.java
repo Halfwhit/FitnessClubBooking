@@ -2,10 +2,15 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 
 class ReviewController {
-    private final EnumMap<BookingController.ClassType, Integer> attendanceNumbers;
-    private final EnumMap<BookingController.ClassType, ArrayList<Integer>> reviews; //Contains all reviews for each class
+    private EnumMap<BookingController.ClassType, Integer> attendanceNumbers;
+    private EnumMap<BookingController.ClassType, ArrayList<Integer>> reviews; //Contains all reviews for each class
 
     ReviewController() {
+        build_storage();
+        System.err.println("Review Controller initialised");
+    }
+
+    private void build_storage() {
         reviews = new EnumMap<>(BookingController.ClassType.class);
         reviews.put(BookingController.ClassType.BODYSCULPT, new ArrayList<>());
         reviews.put(BookingController.ClassType.BOXERCISE, new ArrayList<>());
@@ -19,8 +24,6 @@ class ReviewController {
         attendanceNumbers.put(BookingController.ClassType.SPIN, 0);
         attendanceNumbers.put(BookingController.ClassType.YOGA, 0);
         attendanceNumbers.put(BookingController.ClassType.ZUMBA, 0);
-
-        System.out.println("Review Controller initialised");
     }
 
     public void review_class(BookingController.ClassType classType, int rating) {
@@ -38,7 +41,10 @@ class ReviewController {
         for (Integer review : reviews) {
             sum += review;
         }
-        return (sum / (reviews.size()));
+        if (sum == 0) {
+            return 0;
+        } else
+            return (sum / (reviews.size()));
     }
 
     public void attend_class(BookingController.ClassType classType) {
@@ -49,20 +55,32 @@ class ReviewController {
         return attendanceNumbers.get(classType);
     }
 
-    public int get_class_earnings(BookingController.ClassType classType) {
-        int attended = get_class_attendance(classType);
+    public int get_earnings(BookingController.ClassType classType) {
+        int a = attendanceNumbers.get(classType);
+        int p;
         switch (classType) {
             case BODYSCULPT:
-                attended *= FitnessClass.BODYSCULPT_PRICE;
+                p = FitnessClass.BODYSCULPT_PRICE;
+                return a*p;
             case BOXERCISE:
-                attended *= FitnessClass.BOXERCISE_PRICE;
+                p = FitnessClass.BOXERCISE_PRICE;
+                return a*p;
             case SPIN:
-                attended *= FitnessClass.SPIN_PRICE;
+                p = FitnessClass.SPIN_PRICE;
+                return a*p;
             case YOGA:
-                attended *= FitnessClass.YOGA_PRICE;
+                p = FitnessClass.YOGA_PRICE;
+                return a*p;
             case ZUMBA:
-                attended *= FitnessClass.ZUMBA_PRICE;
+                p = FitnessClass.ZUMBA_PRICE;
+                return a*p;
         }
-        return attended;
+        return 0;
+    }
+
+    public void reset_all_data() {
+        attendanceNumbers.clear();
+        reviews.clear();
+        build_storage();
     }
 }

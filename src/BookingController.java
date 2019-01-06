@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Random;
 
 public class BookingController {
 
@@ -52,7 +51,7 @@ public class BookingController {
     }
 
     private final ArrayList<LinkedHashMap<Session, FitnessClass>> yearlySchedule; //Contains each weeks timetable
-    private final ArrayList<Customer> customers; //Contains all registered users TODO: is this needed?
+    private final ArrayList<Customer> customers; //Contains all registered users
 
     public BookingController() {
         yearlySchedule = new ArrayList<>();
@@ -60,7 +59,7 @@ public class BookingController {
 
         populate_yearlySchedule();
 
-        System.out.println("Booking Controller initialised");
+        System.err.println("Booking Controller initialised");
     }
 
     // Adds the default weekly schedule to every week of the year
@@ -90,21 +89,6 @@ public class BookingController {
         scheduleClass(schedule, new SpinClass(weekNumber, Session.SUN_EVE_2));
     }
 
-    void print_timetable(int weekNumber) {
-        LinkedHashMap<Session, FitnessClass> week = yearlySchedule.get(weekNumber);
-
-        System.out.println("-------------------------------");
-        System.out.println("Week: " + (weekNumber +1));
-        System.out.println("Saturday " + "Morning   : " + week.get(Session.SAT_MORN));
-        System.out.println("Saturday " + "Afternoon : " + week.get(Session.SAT_AFTER));
-        System.out.println("Saturday " + "Evening 1 : " + week.get(Session.SAT_EVE_1));
-        System.out.println("Saturday " + "Evening 2 : " + week.get(Session.SAT_EVE_2));
-        System.out.println("Sunday " + "Morning     : " + week.get(Session.SUN_MORN));
-        System.out.println("Sunday " + "Afternoon   : " + week.get(Session.SUN_AFTER));
-        System.out.println("Sunday " + "Evening 1   : " + week.get(Session.SUN_EVE_1));
-        System.out.println("Sunday " + "Evening 2   : " + week.get(Session.SUN_EVE_2) + "\n");
-    }
-
     LinkedHashMap<Session, FitnessClass> get_week_timetable(int weekNumber) {
         return yearlySchedule.get(weekNumber);
     }
@@ -118,15 +102,17 @@ public class BookingController {
         Customer newCustomer;
         newCustomer = new Customer(name);
         customers.add(newCustomer);
+        System.err.println("Adding new user: " + newCustomer.get_name());
     }
 
     Customer get_customer(String name) {
-        for (Customer customer : customers) {
-            if (customer.get_name().equalsIgnoreCase(name)) {
-                return customer;
+        if (check_customer(name))
+            for (Customer customer : customers) {
+                if (customer.get_name().equalsIgnoreCase(name)) {
+                    return customer;
+                }
             }
-        }
-        //TODO: Error check getting of customers
+        System.err.println("Invalid customer");
         return null;
     }
 
@@ -140,22 +126,21 @@ public class BookingController {
     void book_customer_to_class(Customer customer, FitnessClass fitnessClass, Boolean cardPayment) {
         fitnessClass.add_customer(customer, cardPayment);
         customer.add_to_class(fitnessClass);
-        System.out.println("Booked " + customer + " to " + fitnessClass + " for week " +fitnessClass.get_weekNumber());
+        System.err.println("Booked " + customer + " to " + fitnessClass + " for week " +fitnessClass.get_weekNumber());
     }
 
     public void remove_customer_from_class(Customer customer, FitnessClass fitnessClass) {
         fitnessClass.remove_customer(customer);
         customer.remove_from_class(fitnessClass);
-        System.out.println("Cancled " + fitnessClass + " booking for " + customer);
+        System.err.println("Removed " + fitnessClass + " booking for " + customer);
     }
 
     public void customer_attend_class(Customer customer, FitnessClass fitnessClass) {
         if (get_customer_classList(customer, false).contains(fitnessClass)) {
             customer.attend_class(fitnessClass);
-            System.out.println(customer + " attended " + fitnessClass.getClassName());
+            System.err.println(customer + " attended " + fitnessClass.getClassName());
         } else {
-            //TODO: Error check
-            System.out.println("Invalid class");
+            System.err.println("Invalid class");
         }
     }
 
