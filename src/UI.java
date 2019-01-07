@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 class UI {
 
+    //Check for a valid week number
     private static boolean is_in_range_week(int x) {
         if (x >= 0 && x <= 52)
             return true;
@@ -11,6 +12,7 @@ class UI {
             return false;
     }
 
+    //Returns user input as a string (Used to get name)
     private static String get_input_string() {
         Scanner sc;
         String in;
@@ -21,6 +23,7 @@ class UI {
         return in;
     }
 
+    //User input for numbered menus
     static int get_int_input() {
         Scanner sc;
 
@@ -32,6 +35,7 @@ class UI {
             return get_int_input();
     }
 
+    //User selects week number
     static int select_week() {
         //Based on 2019 calendar:
         System.out.flush();
@@ -59,6 +63,7 @@ class UI {
         return in;
     }
 
+    //User selects session slot
     public static BookingController.Session select_session(LinkedHashMap< BookingController.Session, FitnessClass > timetable, int weekNumber) {
         System.out.flush();
         System.out.println("Week " + weekNumber);
@@ -94,6 +99,7 @@ class UI {
         }
     }
 
+    //Main menu options
     public static int menu_main () {
         System.out.println("1. Book a class\n" +
                 "2. Cancel a booking\n" +
@@ -107,6 +113,7 @@ class UI {
         return get_int_input();
     }
 
+    //Test drive options
     public static int test_drive_menu () {
         System.out.flush();
         System.out.println("1. Generate test data\n" +
@@ -120,11 +127,13 @@ class UI {
         return get_int_input();
     }
 
+    //Get active user
     public static String get_customer () {
         System.out.println("Enter your name, 0 to go back/exit:");
         return get_input_string();
     }
 
+    //Print a customers class list
     public static void print_classes (String customerName, Boolean attended, ArrayList< FitnessClass > classList){
         String formattedClassList = "";
         for (FitnessClass fitnessClass : classList) {
@@ -140,6 +149,7 @@ class UI {
         }
     }
 
+    //Review options
     public static int review_class (FitnessClass fitnessClass){
         System.out.println("Please review the class:\n" +
                 "1. Very dissatisfied\n" +
@@ -162,6 +172,7 @@ class UI {
         }
     }
 
+    //Check if customer wants to leave a review after attending
     public static boolean review_now () {
         System.out.println("Would you like to leave a review of the class?\n" +
                 "1. Yes\n" +
@@ -180,6 +191,7 @@ class UI {
         }
     }
 
+    //Get customer payment method
     public static Boolean card_payment () {
         System.out.println("How will you be paying?\n" +
                 "1. Cash\n" +
@@ -198,4 +210,5 @@ class UI {
                 return card_payment();
         }
     }
+
 }

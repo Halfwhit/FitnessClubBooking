@@ -10,6 +10,7 @@ class FitnessClubBooking {
     private Customer customer;
     private FitnessClass fitnessClass;
 
+    //Program start
     FitnessClubBooking() {
 
         bc = new BookingController();
@@ -24,6 +25,47 @@ class FitnessClubBooking {
         }
     }
 
+    //Main menu functionality
+    private void MainMenu() {
+        switch (UI.menu_main()) {
+            case 1:
+                //Book a class
+                book_class();
+                break;
+            case 2:
+                //Change a class
+                change_class();
+                break;
+            case 3:
+                //Attend a class
+                attend_class();
+                break;
+            case 4:
+                //Review a class
+                review_class();
+                break;
+            case 5:
+                //Monthly fitness class report
+                get_reports();
+                break;
+            case 6:
+                //Monthly champion fitness class report
+                get_champion();
+                break;
+            case 9:
+                //Test Data
+                TestData();
+                break;
+            case 0:
+                customer = null;
+                get_customer();
+                break;
+            default:
+                System.out.println("Invalid selection.\n");
+        }
+    }
+
+    //Test drive menu functionality
     private void TestData() {
 
         //Setup test data
@@ -145,46 +187,7 @@ class FitnessClubBooking {
         }
     }
 
-
-    private void MainMenu() {
-        switch (UI.menu_main()) {
-            case 1:
-                //Book a class
-                book_class();
-                break;
-            case 2:
-                //Change a class
-                change_class();
-                break;
-            case 3:
-                //Attend a class
-                attend_class();
-                break;
-            case 4:
-                //Review a class
-                review_class();
-                break;
-            case 5:
-                //Monthly fitness class report
-                get_reports();
-                break;
-            case 6:
-                //Monthly champion fitness class report
-                get_champion();
-                break;
-            case 9:
-                //Test Data
-                TestData();
-                break;
-            case 0:
-                customer = null;
-                get_customer();
-                break;
-            default:
-                System.out.println("Invalid selection.\n");
-        }
-    }
-
+    //Get active user
     private void get_customer() {
 
         String customerName = UI.get_customer();
@@ -201,6 +204,7 @@ class FitnessClubBooking {
         System.out.println("\nWelcome, " + customer.get_name());
     }
 
+    //Select a class from yearly schedule
     private void set_class() {
         LinkedHashMap<BookingController.Session, FitnessClass> timetable;
         int week;
@@ -218,6 +222,7 @@ class FitnessClubBooking {
         fitnessClass = timetable.get(session);
     }
 
+    //Return a customers class list
     private ArrayList<FitnessClass> get_customer_classes(Boolean attended) {
         ArrayList<FitnessClass> list;
         if (attended)
@@ -227,6 +232,7 @@ class FitnessClubBooking {
         return list;
     }
 
+    //Select a class from a customers class list
     private void set_class_from_list(ArrayList<FitnessClass> list) {
         if (list.isEmpty()) {
             System.out.println("No classes to display\n");
@@ -250,10 +256,12 @@ class FitnessClubBooking {
             fitnessClass = list.get(selection - 1);
     }
 
+    //Resets class information
     private void clear_data() {
         fitnessClass = null;
     }
 
+    //Customer books a class
     private void book_class() {
         set_class();
         if (fitnessClass == null)
@@ -267,6 +275,7 @@ class FitnessClubBooking {
         clear_data();
     }
 
+    //Customer cancels a booking
     private void change_class() {
         set_class_from_list(get_customer_classes(false));
         if (fitnessClass == null)
@@ -277,6 +286,7 @@ class FitnessClubBooking {
         clear_data();
     }
 
+    //Customer attends a booked class
     private void attend_class() {
         set_class_from_list(get_customer_classes(false));
         if (fitnessClass == null)
@@ -290,6 +300,7 @@ class FitnessClubBooking {
         else clear_data();
     }
 
+    //Customer reviews an attended class
     private void review_class() {
         if (fitnessClass == null)
             set_class_from_list(get_customer_classes(true));
@@ -303,6 +314,7 @@ class FitnessClubBooking {
         clear_data();
     }
 
+    //Prints class attendance and ratings
     private void get_reports() {
         System.out.println();
         for (BookingController.ClassType classType : BookingController.ClassType.values()) {
@@ -312,6 +324,7 @@ class FitnessClubBooking {
         System.out.println();
     }
 
+    //Prints class earnings
     private void get_champion() {
         System.out.println();
         for (BookingController.ClassType classType : BookingController.ClassType.values()) {
@@ -321,7 +334,9 @@ class FitnessClubBooking {
         System.out.println();
     }
 
+    //Used to exit the program
     private boolean check_for_exit(String input) {
         return input.equals("0");
     }
+
 }

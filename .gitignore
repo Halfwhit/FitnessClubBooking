@@ -1,3 +1,4 @@
 *.iml
 out/
+src/META-INF
 .idea/

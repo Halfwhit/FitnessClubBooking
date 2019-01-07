@@ -14,6 +14,7 @@ abstract class FitnessClass {
     private final BookingController.Session session;
     private final HashMap<Customer, Boolean> customerList;
 
+    //Constructor
     FitnessClass(int weekNumber, BookingController.Session session) {
         customerList = new HashMap<>();
 
@@ -38,8 +39,18 @@ abstract class FitnessClass {
         customerList.remove(customer);
     }
 
-    //Mark customer as attended
-    //abstract void class_attended(Customer customer);-
+    //Return the classes week number
+    public int get_weekNumber() {
+        return weekNumber;
+    }
+
+    //Return the classes session
+    public BookingController.Session get_session() {
+        return session;
+    }
+
+    //Returns the classes name
+    protected abstract String getClassName();
 
     public String toString() {
         String out = getClassName();
@@ -48,13 +59,4 @@ abstract class FitnessClass {
         return out;
     }
 
-    public int get_weekNumber() {
-        return weekNumber;
-    }
-
-    public BookingController.Session get_session() {
-        return session;
-    }
-
-    protected abstract String getClassName();
 }
